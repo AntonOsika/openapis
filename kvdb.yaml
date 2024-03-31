@@ -1,0 +1,126 @@
+openapi: 3.0.0
+info:
+  title: KVDB API
+  description: A simple key-value store API
+  version: 1.0.0
+
+servers:
+  - url: https://kvdb.io
+
+paths:
+  /{bucket_id}/{key}:
+    get:
+      summary: Get value by key
+      parameters:
+        - in: path
+          name: bucket_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the bucket
+        - in: path
+          name: key
+          required: true
+          schema:
+            type: string
+          description: The key to retrieve the value for
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: Key not found
+    put:
+      summary: Set value for a key
+      parameters:
+        - in: path
+          name: bucket_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the bucket
+        - in: path
+          name: key
+          required: true
+          schema:
+            type: string
+          description: The key to set the value for
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: Delete a key
+      parameters:
+        - in: path
+          name: bucket_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the bucket
+        - in: path
+          name: key
+          required: true
+          schema:
+            type: string
+          description: The key to delete
+      responses:
+        '200':
+          description: Successful response
+  /{bucket_id}/:
+    get:
+      summary: Get all keys in a bucket
+      parameters:
+        - in: path
+          name: bucket_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the bucket
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+    delete:
+      summary: Delete all keys in a bucket
+      parameters:
+        - in: path
+          name: bucket_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the b      responses:
+        '200':
+          description: Successful response
+  /_stats:
+    get:
+      summary: Get statistics for a bucket
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  buckets:
+                    type: integer
+                  keys:
+                    type: integer
+                  keyspace:
+                    type: integer
+                  version:
+                    type: string
